@@ -86,8 +86,8 @@ class Scheduler(SchedulerBase):
 
         self.logger.debug("Selecting jobs to run using first-fit scheduler.")
 
-        # Linear interpolation between selecting from all jobs (greediness == 1) to a subset of
-        # the maximum number of jobs/cores/processes (greediness 0)
+        # Linear interpolation between selecting from all jobs (greediness == 1)
+        # to just 1000 (greediness 0)
         n = int(
             self.settings.greediness * len(selectable_jobs)
             + (1 - self.settings.greediness) * 1000
@@ -113,12 +113,10 @@ class Scheduler(SchedulerBase):
         _selectable_jobs = [heapq.heappop(jobs_heap)[2] for i in range(len(jobs_heap))]
         self.logger.debug(f"Jobs heap: {_selectable_jobs}")
 
-        # Used resources, in the same order as self.global_resources.
-        used_resources = defaultdict(int)
-
         # Iterate jobs, picking the last element at a time, until all elements
         # have been picked, or resources exhausted
         solution = []
+        used_resources = defaultdict(int)
         while _selectable_jobs:
             # Get next job
             job = _selectable_jobs.pop()
