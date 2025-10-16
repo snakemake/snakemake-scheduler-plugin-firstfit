@@ -19,10 +19,9 @@ class SchedulerSettings(SchedulerSettingsBase):
         metadata={
             "help": "Set the greediness (i.e. size) of the heap queue. This will "
             "enable the heap-queue pre-evaluation step, where available jobs are "
-            "sorted based on their rewards. This value between 0 and 1 determines "
+            "sorted based on their rewards. This value (between 0 and 1) determines "
             "how many jobs will be evaluated for execution. A greediness of 0 will "
-            "only evaluate a reduced number of jobs, while a value of 1 will evaluate "
-            "all available jobs."
+            "only evaluate 100 jobs, while a value of 1 will evaluate all available jobs."
         },
     )
     omit_prioritize_by_temp_and_input: bool = field(
@@ -94,8 +93,7 @@ class Scheduler(SchedulerBase):
             # the maximum number of jobs/cores/processes (greediness 0)
             n = int(
                 self.settings.greediness * len(selectable_jobs)
-                + (1 - self.settings.greediness)
-                * 100
+                + (1 - self.settings.greediness) * 100
             )
             self.logger.debug(
                 f"Using greediness of {self.settings.greediness} for job selection (at most {n} jobs)."
