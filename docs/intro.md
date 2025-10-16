@@ -1,0 +1,1 @@
+This plugin provides a fast scheduler for Snakemake since, even though Snakemake's native scheduler are quite fast for most applications, they can get considerably slow with very large workflows (e.g. > 500k jobs). The reason is that each time there are jobs to be submitted, they need to evaluate which ones to run.

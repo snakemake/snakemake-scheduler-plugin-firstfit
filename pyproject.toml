@@ -1,0 +1,39 @@
+[project]
+name = "snakemake-scheduler-plugin-firstfit"
+requires-python = ">=3.11,<4.0"
+version = "0.1.0"
+dependencies = [ "snakemake-interface-common>=1.22.0,<2", "snakemake-interface-scheduler-plugins>=2.0.1,<3",]
+[[project.authors]]
+name = "fgvieira"
+email = "1151762+fgvieira@users.noreply.github.com"
+
+[build-system]
+build-backend = "hatchling.build"
+requires = [ "hatchling",]
+
+[dependency-groups]
+dev = [ "ruff", "coverage", "pytest", "twine", "python-build",]
+
+[project.urls]
+Repository = "https://github.com/your/plugin"
+Documentation = "https://snakemake.github.io/snakemake-plugin-catalog/plugins/scheduler/firstfit.html"
+
+[tool.pixi.workspace]
+channels = [ "conda-forge", "bioconda",]
+platforms = [ "linux-64",]
+
+[tool.pixi.tasks]
+
+[tool.pixi.pypi-dependencies.snakemake_scheduler_plugin_firstfit]
+path = "."
+editable = true
+
+[tool.pixi.environments.dev]
+features = [ "dev",]
+
+[tool.pixi.feature.dev.tasks]
+lint = "ruff check"
+format = "ruff format"
+test = "pytest --cov=snakemake-scheduler-plugin-firstfit --cov-report=xml:coverage-report/coverage.xml --cov-report=term-missing tests/tests.py"
+build = "python -m build"
+check-build = { cmd = "python -m twine check dist/*", depends-on = ["build"] }
