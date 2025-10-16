@@ -5,13 +5,11 @@ Even though `snakemake`'s default schedulers are fast enough for the majority of
 
 `snakemake` is aware of this and, if the default `ilp` scheduler takes more than 10s, it automatically switches to the `greedy` scheduler. However, it is known that the `ilp` sometimes ignores the timeout (coin-or/Cbc#487) and that it can be quite slow instantiating large problems (coin-or/pulp#749).
 
-`firstfit` aims to considerably speed-up the scheduling process by simplifying the optimization steps (and sacrificing some resource efficiency). As an example, given a workflow with ~600k jobs, `snakemake`'s `greedy` scheduler takes around 90s for each scheduling round (i.e. between a job finishing and the launching of the next batch of jobs). `firstfit`, on the other hand, takes between ~5s (greediness of 1) and just 1s (greediness of 0).
+`firstfit` aims to considerably speed-up the scheduling process by simplifying the optimization steps (and sacrificing some resource efficiency). On a very simple example workflow with ~600k jobs, `snakemake`'s `greedy` scheduler takes around 90s for each scheduling round (i.e. between a job finishing and the launching of the next batch of jobs). `firstfit`, on the other hand, takes between ~5s (greediness of 1) and 1s (greediness of 0).
 
 ### How this Plugin works
 
-In this plugin, jobs are selected for run in a [first-fit with one bin](https://en.wikipedia.org/wiki/First-fit_bin_packing) way.
-
-Briefly, available jobs are sorted by their `reward` (so that higher-reward jobs are evaluated first), and sequentially evaluated for submission as long as there are available resources.
+In this plugin, jobs are selected for run in a [first-fit with one bin](https://en.wikipedia.org/wiki/First-fit_bin_packing) way. Briefly, available jobs are sorted by their `reward` (so that higher-reward jobs are evaluated first), and sequentially submited as long as there are available resources.
 
 ### Contributions
 
