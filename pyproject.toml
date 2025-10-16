@@ -4,9 +4,18 @@ requires-python = ">=3.11,<4.0"
 version = "0.1.0"
 dependencies = [ "snakemake >=9.13.2,<10", "snakemake-interface-common>=1.22.0,<2", "snakemake-interface-scheduler-plugins>=2.0.1,<3",]
 
-[[project.authors]]
-name = "fgvieira"
-email = "1151762+fgvieira@users.noreply.github.com"
+[project]
+authors = [
+  {name = "Filipe G. Vieira", email = "1151762+fgvieira@users.noreply.github.com"},
+  {name = "Lucas Czech", email = "luc.czech@gmail.com"},
+]
+maintainers = [
+  {name = "Filipe G. Vieira", email = "1151762+fgvieira@users.noreply.github.com"},
+]
+description = "A Snakemake scheduler plugin that selects the first jobs that fit available resources."
+readme = "README.md"
+license = "MIT"
+keywords = ["snakemake", "plugin", "scheduler", "heap", "firstfit"]
 
 [build-system]
 build-backend = "hatchling.build"
