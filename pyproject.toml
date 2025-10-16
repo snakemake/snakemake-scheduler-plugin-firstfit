@@ -37,3 +37,6 @@ format = "ruff format"
 test = "pytest --cov=snakemake-scheduler-plugin-firstfit --cov-report=xml:coverage-report/coverage.xml --cov-report=term-missing tests/tests.py"
 build = "python -m build"
 check-build = { cmd = "python -m twine check dist/*", depends-on = ["build"] }
+
+[tool.pixi.dependencies]
+snakemake = ">=9.13.2,<10"
