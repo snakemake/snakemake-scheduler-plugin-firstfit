@@ -15,13 +15,13 @@ from snakemake_interface_common.io import AnnotatedStringInterface
 @dataclass
 class SchedulerSettings(SchedulerSettingsBase):
     greediness: Optional[float] = field(
-        default=None,
+        default=1,
         metadata={
             "help": "Set the greediness (i.e. size) of the heap queue. This will "
             "enable the heap-queue pre-evaluation step, where available jobs are "
             "sorted based on their rewards. This value (between 0 and 1) determines "
             "how many jobs will be evaluated for execution. A greediness of 0 will "
-            "only evaluate 100 jobs, while a value of 1 will evaluate all available jobs."
+            "only evaluate 1000 jobs, while a value of 1 will evaluate all available jobs."
         },
     )
     omit_prioritize_by_temp_and_input: bool = field(
@@ -35,7 +35,7 @@ class SchedulerSettings(SchedulerSettingsBase):
     )
 
     def __post_init__(self):
-        if self.greediness and not (0 <= self.greediness <= 1.0):
+        if not (0 <= self.greediness <= 1.0):
             raise ValueError("greediness must be >=0 and <=1")
 
 
@@ -80,45 +80,40 @@ class Scheduler(SchedulerBase):
         # a fallback to the Snakemake's internal greedy scheduler.
         # Otherwise, return the sequence of selected jobs.
 
+        import random
+        import heapq
         from collections import defaultdict
 
         self.logger.debug("Selecting jobs to run using first-fit scheduler.")
 
-        if self.settings.greediness is not None:
-            # Iterate all jobs, keeping the n most rewarding ones in a heap.
-            import random
-            import heapq
+        # Linear interpolation between selecting from all jobs (greediness == 1) to a subset of
+        # the maximum number of jobs/cores/processes (greediness 0)
+        n = int(
+            self.settings.greediness * len(selectable_jobs)
+            + (1 - self.settings.greediness) * 1000
+        )
+        self.logger.debug(
+            f"Using greediness of {self.settings.greediness} for job selection (at most {n} jobs)."
+        )
 
-            # Linear interpolation between selecting from all jobs (greediness == 1) to a subset of
-            # the maximum number of jobs/cores/processes (greediness 0)
-            n = int(
-                self.settings.greediness * len(selectable_jobs)
-                + (1 - self.settings.greediness) * 100
-            )
-            self.logger.debug(
-                f"Using greediness of {self.settings.greediness} for job selection (at most {n} jobs)."
-            )
-
-            # Populate heap
-            jobs_heap = []
-            for job in selectable_jobs:
-                # Get job rewards
-                job_rewards = self.job_reward(job, input_sizes)
-                # Store the reward as the first element of a tuple (used for sorting), a random
-                # number as second element (to break-up ties), and job name as third element (to keep track).
-                if len(jobs_heap) <= n:
-                    # If the heap is not full (or not limited), push the current reward.
-                    heapq.heappush(jobs_heap, (job_rewards, random.random(), job))
-                else:
-                    # If the heap is full, replace the smallest element if the new reward is better.
-                    heapq.heappushpop(jobs_heap, (job_rewards, random.random(), job))
-            # Revert heap
-            _selectable_jobs = [
-                heapq.heappop(jobs_heap)[2] for i in range(len(jobs_heap))
-            ]
-            self.logger.debug(f"Jobs heap: {_selectable_jobs}")
-        else:
-            _selectable_jobs = selectable_jobs
+        # Populate heap
+        jobs_heap = []
+        for job in selectable_jobs:
+            # Get job rewards
+            job_rewards = self.job_reward(job, input_sizes)
+            # Store the reward as the first element of a tuple (used for sorting), a random
+            # number as second element (to break-up ties), and job name as third element (to keep track).
+            if len(jobs_heap) <= n:
+                # If the heap is not full (or not limited), push the current reward.
+                heapq.heappush(jobs_heap, (job_rewards, random.random(), job))
+            else:
+                # If the heap is full, replace the smallest element if the new reward is better.
+                heapq.heappushpop(jobs_heap, (job_rewards, random.random(), job))
+        # Revert heap
+        _selectable_jobs = [
+            heapq.heappop(jobs_heap)[2] for i in range(len(jobs_heap))
+        ]
+        self.logger.debug(f"Jobs heap: {_selectable_jobs}")
 
         # Used resources, in the same order as self.global_resources.
         used_resources = defaultdict(int)
