@@ -87,6 +87,7 @@ class Scheduler(SchedulerBase):
 
         if self.settings.greediness is not None:
             # Iterate all jobs, keeping the n most rewarding ones in a heap.
+            import random
             import heapq
 
             # Linear interpolation between selecting from all jobs (greediness == 1) to a subset of
@@ -94,31 +95,28 @@ class Scheduler(SchedulerBase):
             n = int(
                 self.settings.greediness * len(selectable_jobs)
                 + (1 - self.settings.greediness)
-                * min(available_resources["_cores"], available_resources["_nodes"])
+                * 100
             )
             self.logger.debug(
                 f"Using greediness of {self.settings.greediness} for job selection (at most {n} jobs)."
             )
 
-            # Get jobs rewards
-            jobs_rewards = [
-                self.job_reward(job, input_sizes) for job in selectable_jobs
-            ]
-
             # Populate heap
             jobs_heap = []
-            for idx, job in enumerate(selectable_jobs):
-                # Store the reward as the first element of a tuple (used for sorting), and job name
-                # as second element, to keep track.
+            for job in selectable_jobs:
+                # Get job rewards
+                job_rewards = self.job_reward(job, input_sizes)
+                # Store the reward as the first element of a tuple (used for sorting), a random
+                # number as second element (to break-up ties), and job name as third element (to keep track).
                 if len(jobs_heap) <= n:
                     # If the heap is not full (or not limited), push the current reward.
-                    heapq.heappush(jobs_heap, (jobs_rewards[idx], job))
+                    heapq.heappush(jobs_heap, (job_rewards, random.random(), job))
                 else:
                     # If the heap is full, replace the smallest element if the new reward is better.
-                    heapq.heappushpop(jobs_heap, (jobs_rewards[idx], job))
+                    heapq.heappushpop(jobs_heap, (job_rewards, random.random(), job))
             # Revert heap
             _selectable_jobs = [
-                heapq.heappop(jobs_heap)[1] for i in range(len(jobs_heap))
+                heapq.heappop(jobs_heap)[2] for i in range(len(jobs_heap))
             ]
             self.logger.debug(f"Jobs heap: {_selectable_jobs}")
         else:
@@ -129,7 +127,7 @@ class Scheduler(SchedulerBase):
 
         # Iterate jobs, picking the last element at a time, until all elements
         # have been picked, or resources exhausted
-        solution = set()
+        solution = []
         while _selectable_jobs:
             # Get next job
             job = _selectable_jobs.pop()
@@ -147,7 +145,7 @@ class Scheduler(SchedulerBase):
                 for res, val in job_resources.items():
                     used_resources[res] += val
                 # Add job
-                solution.add(job)
+                solution.append(job)
 
         return solution
 
