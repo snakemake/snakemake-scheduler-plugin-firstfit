@@ -110,9 +110,7 @@ class Scheduler(SchedulerBase):
                 # If the heap is full, replace the smallest element if the new reward is better.
                 heapq.heappushpop(jobs_heap, (job_rewards, random.random(), job))
         # Revert heap
-        _selectable_jobs = [
-            heapq.heappop(jobs_heap)[2] for i in range(len(jobs_heap))
-        ]
+        _selectable_jobs = [heapq.heappop(jobs_heap)[2] for i in range(len(jobs_heap))]
         self.logger.debug(f"Jobs heap: {_selectable_jobs}")
 
         # Used resources, in the same order as self.global_resources.
