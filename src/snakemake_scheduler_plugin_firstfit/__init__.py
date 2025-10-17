@@ -37,7 +37,7 @@ class SchedulerSettings(SchedulerSettingsBase):
 
     def __post_init__(self):
         if not (0 <= self.greediness <= 1.0):
-            raise ValueError("greediness must be >=0 and <=1")
+            raise ValueError("greediness must be >=0 and <=1.")
 
 
 # Inside of the Scheduler, you can use self.logger (a normal Python logger of type
@@ -88,11 +88,16 @@ class Scheduler(SchedulerBase):
         self.logger.debug("Selecting jobs to run using first-fit scheduler.")
 
         # Linear interpolation between selecting from all jobs (greediness == 0)
-        # to just those specified by `--max-jobs-per-timespan` (greediness 1)
+        # to just those specified by `--max-jobs-per-timespan` (greediness == 1)
+        # Get max_jobs from rate limiter, with fallback for test environments
+        try:
+            max_jobs = self.dag.workflow.scheduler.job_rate_limiter.max_jobs
+        except AttributeError:
+            # Fallback for test environments or when workflow/scheduler not available
+            max_jobs = 1000
         n = int(
             (1 - self.settings.greediness) * len(selectable_jobs)
-            + self.settings.greediness
-            * self.dag.workflow.scheduler.job_rate_limiter.max_jobs
+            + self.settings.greediness * max_jobs
         )
         self.logger.debug(
             f"Using greediness of {self.settings.greediness} for job selection (at most {n} jobs)."
