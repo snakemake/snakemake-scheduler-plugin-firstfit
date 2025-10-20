@@ -20,7 +20,7 @@ build-backend = "hatchling.build"
 requires = [ "hatchling",]
 
 [dependency-groups]
-dev = [ "ruff", "coverage", "pytest", "twine", "python-build",]
+dev = [ "ruff", "coverage", "pytest", "twine", "build",]
 
 [project.urls]
 Repository = "https://github.com/fgvieira/snakemake-scheduler-plugin-firstfit/"
