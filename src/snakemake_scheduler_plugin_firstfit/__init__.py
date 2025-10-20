@@ -43,13 +43,6 @@ class SchedulerSettings(SchedulerSettingsBase):
 # Inside of the Scheduler, you can use self.logger (a normal Python logger of type
 # logging.Logger) to log any additional informations or warnings.
 class Scheduler(SchedulerBase):
-    def __post_init__(self) -> None:
-        # Optional, remove method if not needed.
-        # Perform any actions that shall happen after initialization.
-        # Do not overwrite the actual __init__ method, in order to ensure compatibility
-        # with future interface versions.
-        ...
-
     def select_jobs(
         self,
         selectable_jobs: Sequence[JobSchedulerInterface],
