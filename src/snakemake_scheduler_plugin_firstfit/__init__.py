@@ -146,13 +146,6 @@ class Scheduler(SchedulerBase):
         if self.settings.omit_prioritize_by_temp_and_input:
             return job.priority
         else:
-            # Usually, this should guide the scheduler to first schedule all jobs
-            # that remove the largest temp file, then the second largest and so on.
-            # Since the weight is summed up, it can in theory be that it sometimes
-            # prefers a set of many jobs that all depend on smaller temp files though.
-            # A real solution to the problem is therefore to use dummy jobs that
-            # ensure selection of groups of jobs that together delete the same temp
-            # file.
             return (
                 job.priority,
                 sum(input_sizes[f] or 0 for f in job.input if f.is_flagged("temp")),

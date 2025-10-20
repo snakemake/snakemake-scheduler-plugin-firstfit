@@ -62,7 +62,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/1e/db/4254e3eabe8020b458f1a747140d32277ec7a271daf1d235b70dc0b4e6e3/requests-2.32.5-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/66/11/e295e07d4ae500144177f875a8de11daa4d86b8246ab41c76a98ce9280ca/reretry-0.11.8-py2.py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/90/1a/cdb5083f043597c4d4276eae4e4c70c55ab5accec078da8611f24575a367/rpds_py-0.27.1-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
-      - pypi: https://files.pythonhosted.org/packages/e5/d9/460cf1d58945dd771c228c29d5664f431dfc4060d3d092fed40546b11472/smart_open-7.3.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/ea/c3/9eda530579efb091f546f1f02c7010e47b675769c381c4cdab68bbdb848d/smart_open-7.4.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/be/d09147ad1ec7934636ad912901c5fd7667e1c858e19d355237db0d0cd5e4/smmap-5.0.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/de/ef/a8e11c3f46e3605f285dc905e898d8976ac6c1768b105c709b55b0a478a2/snakemake-9.13.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/0f/c4/2da11760cebae7cfc66304ce5dccbabf9f1323e3e0ab8091960b84ad2bd6/snakemake_interface_common-1.22.0-py3-none-any.whl
@@ -165,7 +165,7 @@ environments:
       - pypi: https://files.pythonhosted.org/packages/90/1a/cdb5083f043597c4d4276eae4e4c70c55ab5accec078da8611f24575a367/rpds_py-0.27.1-cp314-cp314-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/e0/35/266a80d0eb97bd224b3265b9437bd89dde0dcf4faf299db1212e81824e7e/ruff-0.14.1-py3-none-manylinux_2_17_x86_64.manylinux2014_x86_64.whl
       - pypi: https://files.pythonhosted.org/packages/91/ff/2e2eed29e02c14a5cb6c57f09b2d5b40e65d6cc71f45b52e0be295ccbc2f/secretstorage-3.4.0-py3-none-any.whl
-      - pypi: https://files.pythonhosted.org/packages/e5/d9/460cf1d58945dd771c228c29d5664f431dfc4060d3d092fed40546b11472/smart_open-7.3.1-py3-none-any.whl
+      - pypi: https://files.pythonhosted.org/packages/ea/c3/9eda530579efb091f546f1f02c7010e47b675769c381c4cdab68bbdb848d/smart_open-7.4.0-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/04/be/d09147ad1ec7934636ad912901c5fd7667e1c858e19d355237db0d0cd5e4/smmap-5.0.2-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/de/ef/a8e11c3f46e3605f285dc905e898d8976ac6c1768b105c709b55b0a478a2/snakemake-9.13.3-py3-none-any.whl
       - pypi: https://files.pythonhosted.org/packages/0f/c4/2da11760cebae7cfc66304ce5dccbabf9f1323e3e0ab8091960b84ad2bd6/snakemake_interface_common-1.22.0-py3-none-any.whl
@@ -1070,10 +1070,10 @@ packages:
   - cryptography>=2.0
   - jeepney>=0.6
   requires_python: '>=3.10'
-- pypi: https://files.pythonhosted.org/packages/e5/d9/460cf1d58945dd771c228c29d5664f431dfc4060d3d092fed40546b11472/smart_open-7.3.1-py3-none-any.whl
+- pypi: https://files.pythonhosted.org/packages/ea/c3/9eda530579efb091f546f1f02c7010e47b675769c381c4cdab68bbdb848d/smart_open-7.4.0-py3-none-any.whl
   name: smart-open
-  version: 7.3.1
-  sha256: e243b2e7f69d6c0c96dd763d6fbbedbb4e0e4fc6d74aa007acc5b018d523858c
+  version: 7.4.0
+  sha256: ff75c536bc3c534fca8e8fbebe1f0e22cafecc1a398d096924720c995d71f34a
   requires_dist:
   - wrapt
   - boto3 ; extra == 's3'
@@ -1084,7 +1084,7 @@ packages:
   - requests ; extra == 'http'
   - requests ; extra == 'webhdfs'
   - paramiko ; extra == 'ssh'
-  - zstandard ; extra == 'zst'
+  - backports-zstd>=1.0.0 ; python_full_version < '3.14' and extra == 'zst'
   - smart-open[azure,gcs,http,s3,ssh,webhdfs,zst] ; extra == 'all'
   - smart-open[all] ; extra == 'test'
   - moto[server] ; extra == 'test'
@@ -1092,10 +1092,13 @@ packages:
   - pytest ; extra == 'test'
   - pytest-rerunfailures ; extra == 'test'
   - pytest-benchmark ; extra == 'test'
+  - pytest-timeout ; extra == 'test'
+  - pytest-xdist[psutil] ; extra == 'test'
   - awscli ; extra == 'test'
   - pyopenssl ; extra == 'test'
   - numpy ; extra == 'test'
-  requires_python: '>=3.8,<4.0'
+  - flake8 ; extra == 'test'
+  requires_python: '>=3.9,<4.0'
 - pypi: https://files.pythonhosted.org/packages/04/be/d09147ad1ec7934636ad912901c5fd7667e1c858e19d355237db0d0cd5e4/smmap-5.0.2-py3-none-any.whl
   name: smmap
   version: 5.0.2
