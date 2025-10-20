@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.3](https://github.com/snakemake/snakemake-scheduler-plugin-firstfit/compare/v0.1.2...v0.1.3) (2025-10-20)
+
+
+### Documentation
+
+* repo URL ([#8](https://github.com/snakemake/snakemake-scheduler-plugin-firstfit/issues/8)) ([eb6f3da](https://github.com/snakemake/snakemake-scheduler-plugin-firstfit/commit/eb6f3da1ecc394d5c186582b9792743dcb1b3122))
+
 ## [0.1.2](https://github.com/snakemake/snakemake-scheduler-plugin-firstfit/compare/v0.1.1...v0.1.2) (2025-10-20)
 
 
