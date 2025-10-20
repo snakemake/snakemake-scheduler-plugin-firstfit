@@ -3,7 +3,7 @@
 
 Even though `snakemake`'s default schedulers are fast enough for most workflows, they can be considerably slow for very large workflows (i.e. > 300k jobs). This is because, every time a job finishes, `snakemake` needs to re-evaluate all pending jobs to select the subset that maximizes usage of available resources. This can be specially problematic if the workflow has a lot of relatively fast jobs, since the time lost waiting for the scheduler could have been used to process jobs instead. `snakemake` is aware of this and, if the default `ilp` scheduler takes more than 10s, it automatically switches to the `greedy` scheduler. However, it is known that the `ilp` sometimes ignores the timeout (coin-or/Cbc#487) and that it can be quite slow instantiating large problems (coin-or/pulp#749).
 
-`firstfit` aims to considerably speed-up the scheduling process by simplifying the optimization steps (while sacrificing resource efficiency). On a very simple example workflow with ~600k jobs, `snakemake`'s `greedy` scheduler takes around 90s for each scheduling round (i.e. between a job finishing and the launching of the next batch of jobs). `firstfit`, on the other hand, takes between ~5s (greediness of 0) and 1s (greediness of 1).
+`firstfit` aims to considerably speed-up the scheduling process by simplifying the optimization steps (while sacrificing some resource usage efficiency). On a very simple example workflow with ~600k jobs, `snakemake`'s `greedy` scheduler takes around 90s for each scheduling round (i.e. between a job finishing and the launching of the next batch of jobs). `firstfit`, on the other hand, takes between ~5s (greediness of 0) and 1s (greediness of 1).
 
 ### How this Plugin works
 
