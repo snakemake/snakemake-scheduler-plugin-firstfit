@@ -19,6 +19,7 @@ jobs:
         with:
           release-type: python
           package-name: snakemake-scheduler-plugin-firstfit
+          token: ${{ secrets.RELEASE_PLEASE_PR_CI_TOKEN }}
 
   publish:
     runs-on: ubuntu-latest
