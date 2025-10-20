@@ -1,7 +1,7 @@
 [project]
 name = "snakemake-scheduler-plugin-firstfit"
 requires-python = ">=3.11,<4.0"
-version = "0.1.1"
+version = "0.1.2"
 dependencies = [ "snakemake >=9.13.2,<10", "snakemake-interface-common>=1.22.0,<2", "snakemake-interface-scheduler-plugins>=2.0.2,<3",]
 authors = [
   {name = "Filipe G. Vieira", email = "1151762+fgvieira@users.noreply.github.com"},
@@ -20,7 +20,7 @@ build-backend = "hatchling.build"
 requires = [ "hatchling",]
 
 [dependency-groups]
-dev = [ "ruff", "coverage", "pytest", "twine", "python-build",]
+dev = [ "ruff", "coverage", "pytest", "twine", "build",]
 
 [project.urls]
 Repository = "https://github.com/fgvieira/snakemake-scheduler-plugin-firstfit/"
