@@ -1214,8 +1214,8 @@ packages:
   requires_python: '>=3.11'
 - pypi: ./
   name: snakemake-scheduler-plugin-firstfit
-  version: 0.1.1
-  sha256: c08ff6edd688102e2bfe551b668edd651ba382317ef3f142926817778cccc13e
+  version: 0.1.2
+  sha256: 72f051bc924d4c8a4a4505fb6a352df8a5dfd4bf3ef3534e9b32dcd1c3e16ef5
   requires_dist:
   - snakemake>=9.13.2,<10
   - snakemake-interface-common>=1.22.0,<2
