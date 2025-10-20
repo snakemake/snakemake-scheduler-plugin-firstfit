@@ -23,7 +23,7 @@ requires = [ "hatchling",]
 dev = [ "ruff", "coverage", "pytest", "twine", "build",]
 
 [project.urls]
-Repository = "https://github.com/fgvieira/snakemake-scheduler-plugin-firstfit/"
+Repository = "https://github.com/snakemake/snakemake-scheduler-plugin-firstfit/"
 Documentation = "https://snakemake.github.io/snakemake-plugin-catalog/plugins/scheduler/firstfit.html"
 
 [tool.pixi.workspace]
