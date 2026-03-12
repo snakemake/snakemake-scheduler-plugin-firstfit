@@ -7,7 +7,7 @@ Even though `snakemake`'s default schedulers are fast enough for most workflows,
 
 ### How this Plugin works
 
-In this plugin, jobs are selected for run in a [first-fit with one bin](https://en.wikipedia.org/wiki/First-fit_bin_packing) basis. Briefly, available jobs are sorted by their `reward` (so that higher-reward jobs are evaluated first), and sequentially submited as long as there are available resources. How long the scheduler keeps trying to fit more jobs depends on the `--scheduler-plugin-firstfit-greediness` parameter, that can go from `0` (all jobs are evaluated) to `1` (only `--max-jobs-per-timespan` jobs are evaluated). Worth noting that a high `greediness` value can lead to a sub-optimal resource usage, since less rewarding jobs that could be run are potentially left out.
+In this plugin, jobs are selected for run in a [first-fit with one bin](https://en.wikipedia.org/wiki/First-fit_bin_packing) basis. Briefly, available jobs are sorted by their `reward` (so that higher-reward jobs are evaluated first), and sequentially submitted as long as there are available resources. How long the scheduler keeps trying to fit more jobs depends on the `--scheduler-plugin-firstfit-greediness` parameter, that can go from `0` (all jobs are evaluated) to `1` (only `--max-jobs-per-timespan` jobs are evaluated). Worth noting that a high `greediness` value can lead to a sub-optimal resource usage, since less rewarding jobs that could be run are potentially left out.
 
 ### Contributions
 
