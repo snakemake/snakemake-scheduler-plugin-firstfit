@@ -7,9 +7,7 @@ from snakemake_interface_scheduler_plugins.interfaces.jobs import JobSchedulerIn
 from snakemake_interface_common.io import AnnotatedStringInterface
 
 
-# Optional:
 # Define settings for your scheduler plugin.
-# They will occur in the Snakemake CLI as --scheduler-<plugin-name>-<param-name>
 # Make sure that all defined fields are 'Optional' and specify a default value
 # of None or anything else that makes sense in your case.
 @dataclass
@@ -29,7 +27,7 @@ class SchedulerSettings(SchedulerSettingsBase):
         default=False,
         metadata={
             "help": "If set, the size of temporary or input files is not taken into "
-            "account when prioritizing. By default, it is  assumed that temp files "
+            "account when prioritizing. By default, it is assumed that temp files "
             "should be removed as soon as possible, and larger input files may take "
             "longer to process, so it is better to start them earlier.",
         },
